@@ -1,5 +1,6 @@
-# Burst Launcher 1.2
+# Burst Launcher
+Launcher experimental para versões antigas do Minecraft Pocket Edition.
 
-Interface inicial de um launcher Android para versões antigas do MCPE.
+**FEITO POR PIERRY, O ORIGINAL**
 
-A versão 1.2 implementa a interface e a navegação. Ela não inclui arquivos proprietários do Minecraft nem o mecanismo de execução do jogo.
+O projeto não inclui nem distribui arquivos proprietários do Minecraft. Use somente arquivos de jogo que você possua legalmente.
