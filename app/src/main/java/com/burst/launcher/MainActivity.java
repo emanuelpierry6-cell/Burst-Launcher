@@ -15,14 +15,13 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    private final int AMARELO = Color.rgb(255, 210, 0);
-    private final int FUNDO = Color.rgb(8, 8, 8);
-    private final int CARD = Color.rgb(19, 19, 19);
-    private final int CINZA = Color.rgb(150, 150, 150);
-    private final int BRANCO = Color.WHITE;
+    private static final int AMARELO = Color.rgb(255, 210, 0);
+    private static final int FUNDO = Color.rgb(8, 8, 8);
+    private static final int CARD = Color.rgb(19, 19, 19);
+    private static final int CINZA = Color.rgb(150, 150, 150);
+    private static final int BRANCO = Color.WHITE;
 
     private LinearLayout conteudo;
-
     private TextView navInicio;
     private TextView navNoticias;
     private TextView navConfig;
@@ -38,63 +37,48 @@ public class MainActivity extends Activity {
         mostrarInicio();
     }
 
-    // =========================================================
-    // COMPONENTES
-    // =========================================================
+    private GradientDrawable fundo(int cor, int raio) {
+        GradientDrawable g = new GradientDrawable();
+        g.setColor(cor);
+        g.setCornerRadius(raio);
+        return g;
+    }
 
     private TextView texto(String valor, float tamanho) {
         TextView t = new TextView(this);
-
         t.setText(valor);
         t.setTextSize(tamanho);
         t.setTextColor(BRANCO);
         t.setGravity(Gravity.CENTER_VERTICAL);
-
         return t;
-    }
-
-    private GradientDrawable arredondado(int cor, int raio) {
-        GradientDrawable g = new GradientDrawable();
-        g.setColor(cor);
-        g.setCornerRadius(raio);
-
-        return g;
     }
 
     private TextView titulo(String valor) {
         TextView t = texto(valor, 26);
-
         t.setTextColor(AMARELO);
         t.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         t.setGravity(Gravity.CENTER);
-
         return t;
     }
 
     private TextView botao(String valor) {
-        TextView b = texto(valor, 18);
-
-        b.setTextColor(Color.BLACK);
-        b.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        b.setGravity(Gravity.CENTER);
-
-        b.setPadding(20, 20, 20, 20);
-        b.setBackground(arredondado(AMARELO, 40));
-
-        return b;
+        TextView t = texto(valor, 18);
+        t.setTextColor(Color.BLACK);
+        t.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        t.setGravity(Gravity.CENTER);
+        t.setPadding(20, 22, 20, 22);
+        t.setBackground(fundo(AMARELO, 40));
+        return t;
     }
 
     private TextView cartao(String valor, float tamanho) {
         TextView t = texto(valor, tamanho);
-
         t.setPadding(20, 20, 20, 20);
-        t.setBackground(arredondado(CARD, 25));
-
+        t.setBackground(fundo(CARD, 25));
         return t;
     }
 
     private void adicionar(View view, int margem) {
-
         LinearLayout.LayoutParams p =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
@@ -102,38 +86,25 @@ public class MainActivity extends Activity {
                 );
 
         p.setMargins(margem, margem, margem, margem);
-
         conteudo.addView(view, p);
     }
-
-    // =========================================================
-    // ESTRUTURA
-    // =========================================================
 
     private void criarEstrutura() {
 
         LinearLayout principal = new LinearLayout(this);
-
         principal.setOrientation(LinearLayout.VERTICAL);
         principal.setBackgroundColor(FUNDO);
 
         ScrollView scroll = new ScrollView(this);
-
         scroll.setBackgroundColor(FUNDO);
 
         conteudo = new LinearLayout(this);
-
         conteudo.setOrientation(LinearLayout.VERTICAL);
         conteudo.setPadding(22, 22, 22, 25);
 
         scroll.addView(conteudo);
 
-        // -------------------------
-        // BARRA INFERIOR
-        // -------------------------
-
         LinearLayout barra = new LinearLayout(this);
-
         barra.setOrientation(LinearLayout.HORIZONTAL);
         barra.setGravity(Gravity.CENTER);
         barra.setPadding(5, 5, 5, 5);
@@ -148,42 +119,15 @@ public class MainActivity extends Activity {
         navConfig.setGravity(Gravity.CENTER);
 
         LinearLayout.LayoutParams item =
-                new LinearLayout.LayoutParams(
-                        0,
-                        90,
-                        1
-                );
+                new LinearLayout.LayoutParams(0, 90, 1);
 
         barra.addView(navInicio, item);
         barra.addView(navNoticias, item);
         barra.addView(navConfig, item);
 
-        navInicio.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mostrarInicio();
-                    }
-                }
-        );
-
-        navNoticias.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mostrarNoticias();
-                    }
-                }
-        );
-
-        navConfig.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mostrarConfig();
-                    }
-                }
-        );
+        navInicio.setOnClickListener(v -> mostrarInicio());
+        navNoticias.setOnClickListener(v -> mostrarNoticias());
+        navConfig.setOnClickListener(v -> mostrarConfig());
 
         principal.addView(
                 scroll,
@@ -211,20 +155,12 @@ public class MainActivity extends Activity {
 
         if (tela.equals("inicio")) {
             navInicio.setTextColor(AMARELO);
-        }
-
-        if (tela.equals("noticias")) {
+        } else if (tela.equals("noticias")) {
             navNoticias.setTextColor(AMARELO);
-        }
-
-        if (tela.equals("config")) {
+        } else if (tela.equals("config")) {
             navConfig.setTextColor(AMARELO);
         }
     }
-
-    // =========================================================
-    // INÍCIO
-    // =========================================================
 
     private void mostrarInicio() {
 
@@ -232,93 +168,45 @@ public class MainActivity extends Activity {
         selecionar("inicio");
 
         TextView logo = titulo("BURST");
-
         logo.setTextSize(38);
-
         adicionar(logo, 3);
 
-        TextView launcher = texto(
-                "L A U N C H E R",
-                13
-        );
-
+        TextView launcher = texto("L A U N C H E R", 13);
         launcher.setTextColor(CINZA);
         launcher.setGravity(Gravity.CENTER);
-
         adicionar(launcher, 0);
 
-        TextView icone = texto(
-                "▰\n▰\n▰",
-                40
-        );
-
+        TextView icone = texto("▰\n▰\n▰", 40);
         icone.setTextColor(AMARELO);
         icone.setGravity(Gravity.CENTER);
-
         adicionar(icone, 15);
 
-        // VERSÃO
-
-        TextView versao = texto(
-                "MCPE 0.15.10        ▼",
-                18
-        );
-
+        TextView versao = texto("MCPE 0.15.10        ▼", 18);
         versao.setTextColor(AMARELO);
         versao.setGravity(Gravity.CENTER);
-
         versao.setPadding(20, 24, 20, 24);
+        versao.setBackground(fundo(Color.rgb(45, 38, 5), 30));
 
-        versao.setBackground(
-                arredondado(
-                        Color.rgb(45, 38, 5),
-                        30
-                )
-        );
-
-        versao.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        escolherVersao();
-                    }
-                }
-        );
+        versao.setOnClickListener(v -> escolherVersao());
 
         adicionar(versao, 8);
 
-        // JOGAR
-
-        TextView jogar = botao(
-                "▶   JOGAR"
-        );
-
+        TextView jogar = botao("▶   JOGAR");
         jogar.setTextSize(22);
 
-        jogar.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        new AlertDialog.Builder(MainActivity.this)
-                                .setTitle("Burst Launcher")
-                                .setMessage(
-                                        "Versão selecionada:\n\n" +
-                                        "MCPE 0.15.10\n\n" +
-                                        "O launcher está pronto."
-                                )
-                                .setPositiveButton(
-                                        "OK",
-                                        null
-                                )
-                                .show();
-                    }
-                }
+        jogar.setOnClickListener(v ->
+                new AlertDialog.Builder(this)
+                        .setTitle("Burst Launcher")
+                        .setMessage(
+                                "Versão selecionada:\n\n" +
+                                "MCPE 0.15.10\n\n" +
+                                "O launcher está pronto."
+                        )
+                        .setPositiveButton("OK", null)
+                        .show()
         );
 
         adicionar(jogar, 15);
-
-        // CONTA
 
         TextView conta = cartao(
                 "👤   Steve_BR\n\n" +
@@ -326,24 +214,11 @@ public class MainActivity extends Activity {
                 16
         );
 
-        conta.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        abrirContas();
-                    }
-                }
-        );
-
+        conta.setOnClickListener(v -> abrirContas());
         adicionar(conta, 12);
 
-        // STATUS
-
         LinearLayout status = new LinearLayout(this);
-
-        status.setOrientation(
-                LinearLayout.HORIZONTAL
-        );
+        status.setOrientation(LinearLayout.HORIZONTAL);
 
         TextView render = cartao(
                 "🎨\n\nRENDERIZADOR\n\nOpenGL ES 2.0",
@@ -367,12 +242,7 @@ public class MainActivity extends Activity {
                         1
                 );
 
-        coluna.setMargins(
-                4,
-                4,
-                4,
-                4
-        );
+        coluna.setMargins(4, 4, 4, 4);
 
         status.addView(render, coluna);
         status.addView(armazenamento, coluna);
@@ -380,93 +250,52 @@ public class MainActivity extends Activity {
 
         adicionar(status, 5);
 
-        // AVISO
-
         TextView aviso = cartao(
                 "⚠  Esta é uma versão não-oficial do MCPE.\n\n" +
                 "Compre o jogo original na Microsoft Store.",
                 14
         );
 
-        aviso.setTextColor(
-                Color.rgb(255, 110, 110)
-        );
-
-        aviso.setBackground(
-                arredondado(
-                        Color.rgb(40, 12, 12),
-                        25
-                )
-        );
+        aviso.setTextColor(Color.rgb(255, 110, 110));
+        aviso.setBackground(fundo(Color.rgb(40, 12, 12), 25));
 
         adicionar(aviso, 15);
 
-        // INFORMAÇÕES
-
-        TextView informacao = cartao(
+        TextView info = cartao(
                 "BURST LAUNCHER\n\n" +
                 "Launcher experimental para versões antigas.\n\n" +
                 "Versão: 1.2.0",
                 14
         );
 
-        informacao.setTextColor(CINZA);
-
-        adicionar(informacao, 10);
+        info.setTextColor(CINZA);
+        adicionar(info, 10);
     }
-
-    // =========================================================
-    // VERSÕES
-    // =========================================================
 
     private void escolherVersao() {
 
-        final String[] versoes = {
+        String[] versoes = {
                 "MCPE 0.15.10",
                 "MCPE 0.14.3"
         };
 
         new AlertDialog.Builder(this)
                 .setTitle("Selecionar versão")
-                .setItems(
-                        versoes,
-                        new android.content.DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(
-                                    android.content.DialogInterface dialog,
-                                    int which) {
-
-                                Toast.makeText(
-                                        MainActivity.this,
-                                        "Selecionado: " +
-                                                versoes[which],
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-                        }
+                .setItems(versoes, (dialog, which) ->
+                        Toast.makeText(
+                                this,
+                                "Selecionado: " + versoes[which],
+                                Toast.LENGTH_SHORT
+                        ).show()
                 )
                 .show();
     }
 
-    // =========================================================
-    // CONTAS
-    // =========================================================
-
     private void abrirContas() {
 
         LinearLayout layout = new LinearLayout(this);
-
-        layout.setOrientation(
-                LinearLayout.VERTICAL
-        );
-
-        layout.setPadding(
-                20,
-                10,
-                20,
-                10
-        );
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(20, 10, 20, 10);
 
         TextView local = cartao(
                 "👤  Steve_BR\n\n" +
@@ -486,7 +315,6 @@ public class MainActivity extends Activity {
         adicionarConta.setTextSize(14);
 
         layout.addView(local);
-
         layout.addView(microsoft);
 
         LinearLayout.LayoutParams p =
@@ -495,58 +323,32 @@ public class MainActivity extends Activity {
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
 
-        p.setMargins(
-                0,
-                15,
-                0,
-                0
-        );
+        p.setMargins(0, 15, 0, 0);
+        layout.addView(adicionarConta, p);
 
-        layout.addView(
-                adicionarConta,
-                p
-        );
-
-        adicionarConta.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Toast.makeText(
-                                MainActivity.this,
-                                "Login Microsoft será adicionado futuramente.",
-                                Toast.LENGTH_LONG
-                        ).show();
-                    }
-                }
+        adicionarConta.setOnClickListener(v ->
+                Toast.makeText(
+                        this,
+                        "Login Microsoft será adicionado futuramente.",
+                        Toast.LENGTH_LONG
+                ).show()
         );
 
         new AlertDialog.Builder(this)
                 .setTitle("Contas")
                 .setView(layout)
-                .setNegativeButton(
-                        "FECHAR",
-                        null
-                )
+                .setNegativeButton("FECHAR", null)
                 .show();
     }
-
-    // =========================================================
-    // NOTÍCIAS
-    // =========================================================
 
     private void mostrarNoticias() {
 
         limpar();
         selecionar("noticias");
 
-        TextView titulo = titulo(
-                "NOTÍCIAS"
-        );
-
-        titulo.setTextSize(29);
-
-        adicionar(titulo, 5);
+        TextView t = titulo("NOTÍCIAS");
+        t.setTextSize(29);
+        adicionar(t, 5);
 
         noticia(
                 "Burst Launcher v1.4.2 Released",
@@ -574,112 +376,48 @@ public class MainActivity extends Activity {
         );
     }
 
-    private void noticia(
-            String tituloTexto,
-            String descricao
-    ) {
+    private void noticia(String tituloTexto, String descricao) {
 
-        LinearLayout bloco =
-                new LinearLayout(this);
+        LinearLayout bloco = new LinearLayout(this);
+        bloco.setOrientation(LinearLayout.VERTICAL);
+        bloco.setPadding(20, 20, 20, 20);
+        bloco.setBackground(fundo(CARD, 25));
 
-        bloco.setOrientation(
-                LinearLayout.VERTICAL
-        );
-
-        bloco.setPadding(
-                20,
-                20,
-                20,
-                20
-        );
-
-        bloco.setBackground(
-                arredondado(
-                        CARD,
-                        25
-                )
-        );
-
-        TextView tituloNoticia =
-                texto(
-                        tituloTexto,
-                        18
-                );
-
-        tituloNoticia.setTextColor(
-                AMARELO
-        );
-
+        TextView tituloNoticia = texto(tituloTexto, 18);
+        tituloNoticia.setTextColor(AMARELO);
         tituloNoticia.setTypeface(
                 Typeface.DEFAULT,
                 Typeface.BOLD
         );
 
-        TextView textoNoticia =
-                texto(
-                        descricao,
-                        14
-                );
+        TextView descricaoNoticia = texto(descricao, 14);
+        descricaoNoticia.setTextColor(CINZA);
+        descricaoNoticia.setPadding(0, 12, 0, 0);
 
-        textoNoticia.setTextColor(
-                CINZA
-        );
+        bloco.addView(tituloNoticia);
+        bloco.addView(descricaoNoticia);
 
-        textoNoticia.setPadding(
-                0,
-                12,
-                0,
-                0
-        );
-
-        bloco.addView(
-                tituloNoticia
-        );
-
-        bloco.addView(
-                textoNoticia
-        );
-
-        adicionar(
-                bloco,
-                10
-        );
+        adicionar(bloco, 10);
     }
-
-    // =========================================================
-    // CONFIGURAÇÕES
-    // =========================================================
 
     private void mostrarConfig() {
 
         limpar();
         selecionar("config");
 
-        TextView titulo = titulo(
-                "CONFIGURAÇÕES"
-        );
+        TextView t = titulo("CONFIGURAÇÕES");
+        t.setTextSize(27);
+        adicionar(t, 5);
 
-        titulo.setTextSize(27);
-
-        adicionar(titulo, 5);
-
-        TextView renderizador = cartao(
+        TextView renderer = cartao(
                 "🎨  RENDERIZADOR\n\n" +
                 "OpenGL ES 2.0\n\n" +
                 "Toque para selecionar",
                 15
         );
 
-        renderizador.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        escolherRenderizador();
-                    }
-                }
-        );
-
-        adicionar(renderizador, 10);
+        renderer.setOnClickListener(v -> escolherRenderizador());
+        adicionar(renderer, 10);
 
         TextView ram = cartao(
                 "🧠  MEMÓRIA RAM\n\n" +
@@ -697,18 +435,12 @@ public class MainActivity extends Activity {
                 15
         );
 
-        debug.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Toast.makeText(
-                                MainActivity.this,
-                                "Opção de debug alterada.",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                }
+        debug.setOnClickListener(v ->
+                Toast.makeText(
+                        this,
+                        "Opção de debug alterada.",
+                        Toast.LENGTH_SHORT
+                ).show()
         );
 
         adicionar(debug, 10);
@@ -746,39 +478,37 @@ public class MainActivity extends Activity {
 
         adicionar(backups, 10);
 
-        TextView github = botao(
-                "GITHUB"
-        );
-
+        TextView github = botao("GITHUB");
         github.setTextSize(15);
 
-        github.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Toast.makeText(
-                                MainActivity.this,
-                                "GitHub do Burst Launcher",
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                }
+        github.setOnClickListener(v ->
+                Toast.makeText(
+                        this,
+                        "GitHub do Burst Launcher",
+                        Toast.LENGTH_SHORT
+                ).show()
         );
 
         adicionar(github, 15);
     }
 
-    // =========================================================
-    // RENDERIZADOR
-    // =========================================================
-
     private void escolherRenderizador() {
 
-        final String[] opcoes = {
+        String[] opcoes = {
                 "OpenGL ES 2.0",
                 "OpenGL ES 3.0",
                 "Vulkan Beta"
         };
 
-      
+        new AlertDialog.Builder(this)
+                .setTitle("Selecionar renderizador")
+                .setItems(opcoes, (dialog, which) ->
+                        Toast.makeText(
+                                this,
+                                "Renderizador: " + opcoes[which],
+                                Toast.LENGTH_SHORT
+                        ).show()
+                )
+                .show();
+    }
+}
